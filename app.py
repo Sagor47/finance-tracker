@@ -130,7 +130,7 @@ with st.sidebar.form("transaction_form", clear_on_submit=True):
     t_date = st.date_input("Date", datetime.today())
     
     # NEW: Payment Method selection
-    t_method = st.radio("Account", ["Bank", "Cash"], horizontal=True)
+    t_method = st.radio("Account", ["Bank", "Cash", "bKash"], horizontal=True)
     
     if t_type == "Income":
         t_category = st.selectbox("Category", INCOME_CATEGORIES)
@@ -153,6 +153,7 @@ total_income = 0.0
 total_expense = 0.0
 bank_income, bank_expense = 0.0, 0.0
 cash_income, cash_expense = 0.0, 0.0
+bkash_income, bkash_expense = 0.0, 0.0
 
 if not df.empty:
     # Total calculations
@@ -167,24 +168,29 @@ if not df.empty:
     cash_income = df[(df['type'] == 'Income') & (df['payment_method'] == 'Cash')]['amount'].sum()
     cash_expense = df[(df['type'] == 'Expense') & (df['payment_method'] == 'Cash')]['amount'].sum()
 
+    # bKash calculations
+    bkash_income = df[(df['type'] == 'Income') & (df['payment_method'] == 'bKash')]['amount'].sum()
+    bkash_expense = df[(df['type'] == 'Expense') & (df['payment_method'] == 'bKash')]['amount'].sum()
+
 net_savings = total_income - total_expense
 bank_balance = bank_income - bank_expense
 cash_balance = cash_income - cash_expense
+bkash_balance = bkash_income - bkash_expense
 
 # --- Main Dashboard: KPI Row ---
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
     st.container(border=True)
     st.markdown("### Total Income")
     st.markdown(f"<span class='income-text'>৳{total_income:,.2f}</span>", unsafe_allow_html=True)
-    st.markdown(f"<span class='small-text'>Bank: ৳{bank_income:,.2f} | Cash: ৳{cash_income:,.2f}</span>", unsafe_allow_html=True)
+    st.markdown(f"<span class='small-text'>Bank: ৳{bank_income:,.2f} | Cash: ৳{cash_income:,.2f} | bKash: ৳{bkash_income:,.2f}</span>", unsafe_allow_html=True)
 
 with col2:
     st.container(border=True)
     st.markdown("### Total Expenses")
     st.markdown(f"<span class='expense-text'>৳{total_expense:,.2f}</span>", unsafe_allow_html=True)
-    st.markdown(f"<span class='small-text'>Bank: ৳{bank_expense:,.2f} | Cash: ৳{cash_expense:,.2f}</span>", unsafe_allow_html=True)
+    st.markdown(f"<span class='small-text'>Bank: ৳{bank_expense:,.2f} | Cash: ৳{cash_expense:,.2f} | bKash: ৳{bkash_expense:,.2f}</span>", unsafe_allow_html=True)
 
 with col3:
     st.container(border=True)
@@ -197,6 +203,12 @@ with col4:
     st.markdown("### 💵 Cash Balance")
     c_color = "#2e7d32" if cash_balance >= 0 else "#c62828"
     st.markdown(f"<span style='color:{c_color}; font-weight:bold; font-size: 1.2rem;'>৳{cash_balance:,.2f}</span>", unsafe_allow_html=True)
+
+with col5:
+    st.container(border=True)
+    st.markdown("### 📱 bKash")
+    bk_color = "#2e7d32" if bkash_balance >= 0 else "#c62828"
+    st.markdown(f"<span style='color:{bk_color}; font-weight:bold; font-size: 1.2rem;'>৳{bkash_balance:,.2f}</span>", unsafe_allow_html=True)
 
 st.divider()
 
