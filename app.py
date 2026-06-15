@@ -122,9 +122,11 @@ EXPENSE_CATEGORIES = [
     "Other Expenses"
 ]
 
+# Transaction Type MUST be outside the form to change categories dynamically
+t_type = st.sidebar.radio("Transaction Type", ["Expense", "Income"], horizontal=True)
+
 with st.sidebar.form("transaction_form", clear_on_submit=True):
     t_date = st.date_input("Date", datetime.today())
-    t_type = st.radio("Transaction Type", ["Expense", "Income"], horizontal=True)
     
     # NEW: Payment Method selection
     t_method = st.radio("Account", ["Bank", "Cash"], horizontal=True)
