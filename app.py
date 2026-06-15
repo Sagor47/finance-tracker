@@ -97,7 +97,16 @@ st.sidebar.divider()
 st.sidebar.header("➕ Add New Transaction")
 
 # Define categories based on type
-INCOME_CATEGORIES = ["Salary", "Investments", "Side Hustle", "Gifts", "Other Income"]
+INCOME_CATEGORIES = [
+    "Salary", 
+    "Commission", 
+    "Bonus", 
+    "Investments", 
+    "Freelance/Side Hustle", 
+    "Gifts", 
+    "General Income", 
+    "Other Income"
+]
 EXPENSE_CATEGORIES = [
     "Food & Dining", 
     "Fitness/Wellness", 
