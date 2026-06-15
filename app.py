@@ -86,6 +86,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("💸 Personal Finance Dashboard")
+st.markdown("© 2026 Sagor Hossen")
 st.markdown("Track your income, expenses, and account balances.")
 
 # --- Sidebar: Input Interface & Settings ---
