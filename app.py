@@ -91,7 +91,7 @@ st.markdown("Track your income, expenses, and account balances.")
 
 # --- Sidebar: Input Interface & Settings ---
 st.sidebar.header("⚙️ Settings")
-savings_goal = st.sidebar.number_input("Set Savings Goal ($)", min_value=0.0, value=5000.0, step=100.0)
+savings_goal = st.sidebar.number_input("Set Savings Goal (৳)", min_value=0.0, value=5000.0, step=100.0)
 
 st.sidebar.divider()
 
@@ -137,7 +137,7 @@ with st.sidebar.form("transaction_form", clear_on_submit=True):
     else:
         t_category = st.selectbox("Category", EXPENSE_CATEGORIES)
         
-    t_amount = st.number_input("Amount ($)", min_value=0.01, format="%.2f")
+    t_amount = st.number_input("Amount (৳)", min_value=0.01, format="%.2f")
     t_desc = st.text_input("Description (Optional)")
     
     submitted = st.form_submit_button("Save Transaction")
@@ -177,26 +177,26 @@ col1, col2, col3, col4 = st.columns(4)
 with col1:
     st.container(border=True)
     st.markdown("### Total Income")
-    st.markdown(f"<span class='income-text'>${total_income:,.2f}</span>", unsafe_allow_html=True)
-    st.markdown(f"<span class='small-text'>Bank: ${bank_income:,.2f} | Cash: ${cash_income:,.2f}</span>", unsafe_allow_html=True)
+    st.markdown(f"<span class='income-text'>৳{total_income:,.2f}</span>", unsafe_allow_html=True)
+    st.markdown(f"<span class='small-text'>Bank: ৳{bank_income:,.2f} | Cash: ৳{cash_income:,.2f}</span>", unsafe_allow_html=True)
 
 with col2:
     st.container(border=True)
     st.markdown("### Total Expenses")
-    st.markdown(f"<span class='expense-text'>${total_expense:,.2f}</span>", unsafe_allow_html=True)
-    st.markdown(f"<span class='small-text'>Bank: ${bank_expense:,.2f} | Cash: ${cash_expense:,.2f}</span>", unsafe_allow_html=True)
+    st.markdown(f"<span class='expense-text'>৳{total_expense:,.2f}</span>", unsafe_allow_html=True)
+    st.markdown(f"<span class='small-text'>Bank: ৳{bank_expense:,.2f} | Cash: ৳{cash_expense:,.2f}</span>", unsafe_allow_html=True)
 
 with col3:
     st.container(border=True)
     st.markdown("### 🏦 Bank Balance")
     b_color = "#2e7d32" if bank_balance >= 0 else "#c62828"
-    st.markdown(f"<span style='color:{b_color}; font-weight:bold; font-size: 1.2rem;'>${bank_balance:,.2f}</span>", unsafe_allow_html=True)
+    st.markdown(f"<span style='color:{b_color}; font-weight:bold; font-size: 1.2rem;'>৳{bank_balance:,.2f}</span>", unsafe_allow_html=True)
 
 with col4:
     st.container(border=True)
     st.markdown("### 💵 Cash Balance")
     c_color = "#2e7d32" if cash_balance >= 0 else "#c62828"
-    st.markdown(f"<span style='color:{c_color}; font-weight:bold; font-size: 1.2rem;'>${cash_balance:,.2f}</span>", unsafe_allow_html=True)
+    st.markdown(f"<span style='color:{c_color}; font-weight:bold; font-size: 1.2rem;'>৳{cash_balance:,.2f}</span>", unsafe_allow_html=True)
 
 st.divider()
 
@@ -216,10 +216,10 @@ with col_chart:
             y='amount', 
             color='category',
             text='amount',
-            labels={'amount': 'Amount ($)', 'category': 'Category'},
+            labels={'amount': 'Amount (৳)', 'category': 'Category'},
             template='plotly_white'
         )
-        fig.update_traces(texttemplate='$%{text:.2s}', textposition='outside')
+        fig.update_traces(texttemplate='৳%{text:.2s}', textposition='outside')
         fig.update_layout(showlegend=False, margin=dict(t=10, l=10, r=10, b=10))
         st.plotly_chart(fig, use_container_width=True)
     else:
@@ -227,14 +227,14 @@ with col_chart:
 
 with col_goal:
     st.subheader("🎯 Total Savings Progress")
-    st.write(f"**Target:** ${savings_goal:,.2f}")
+    st.write(f"**Target:** ৳{savings_goal:,.2f}")
     
     if savings_goal > 0:
         current_progress = max(0.0, net_savings) 
         progress_pct = min(current_progress / savings_goal, 1.0)
         
         st.progress(progress_pct)
-        st.write(f"**Current Total:** ${current_progress:,.2f} ({progress_pct*100:.1f}%)")
+        st.write(f"**Current Total:** ৳{current_progress:,.2f} ({progress_pct*100:.1f}%)")
         
         if progress_pct >= 1.0:
             st.balloons()
@@ -255,7 +255,7 @@ if not df.empty:
     if 'created_at' in display_df.columns:
         display_df = display_df.drop(columns=['created_at'])
         
-    display_df['amount'] = display_df['amount'].apply(lambda x: f"${x:,.2f}")
+    display_df['amount'] = display_df['amount'].apply(lambda x: f"৳{x:,.2f}")
     
     st.dataframe(
         display_df, 
