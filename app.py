@@ -49,6 +49,10 @@ def add_transaction(date, amount, category, trans_type, payment_method, descript
         'created_at': firestore.SERVER_TIMESTAMP
     })
 
+def delete_transaction(transaction_id):
+    """Delete a transaction from Firebase Cloud by its ID."""
+    db.collection('users').document(safe_username).collection('transactions').document(transaction_id).delete()
+
 def load_data():
     """Load all transactions from Firebase into a pandas DataFrame."""
     docs = db.collection('users').document(safe_username).collection('transactions').stream()
@@ -144,6 +148,7 @@ with st.sidebar.form("transaction_form", clear_on_submit=True):
     if submitted:
         add_transaction(t_date, t_amount, t_category, t_type, t_method, t_desc)
         st.success("Transaction added successfully!")
+        st.rerun()
 
 # --- Main Dashboard: Data Processing ---
 df = load_data()
@@ -282,5 +287,23 @@ if not df.empty:
             "description": "Description"
         }
     )
+
+    # --- NEW: Delete Feature ---
+    st.write("")
+    with st.expander("🗑️ Delete a Transaction"):
+        # Create a formatted label for the dropdown so the user knows what they are deleting
+        df['delete_label'] = df['date'].astype(str) + " | " + df['category'] + " | ৳" + df['amount'].apply(lambda x: f"{x:,.2f}") + " (" + df['type'] + ")"
+        
+        # Make a dictionary to map the formatted label back to the real database ID
+        transaction_dict = dict(zip(df['delete_label'], df['id']))
+        
+        selected_label = st.selectbox("Select a transaction to permanently delete:", list(transaction_dict.keys()))
+        
+        if st.button("Delete Selected Transaction", type="primary"):
+            target_id = transaction_dict[selected_label]
+            delete_transaction(target_id)
+            st.success("Transaction deleted successfully!")
+            st.rerun() # Refresh the app instantly to show the updated numbers
+            
 else:
     st.info("No transactions recorded yet. Use the sidebar to add your first entry!")
